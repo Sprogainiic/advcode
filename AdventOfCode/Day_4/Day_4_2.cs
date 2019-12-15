@@ -11,18 +11,6 @@ namespace AdventOfCode.Day_4
         public static void GetPossiblePasswordCount()
         {
             List<int> results = new List<int>();
-            //List<int> testList = new List<int>() { 111122, 123444, 112233, 111111, 144455, 112345, 122333 };
-
-            //foreach (var number in testList)
-            //{
-            //    bool one = IsLessThenNext(number);
-            //    bool two = ContainsAdjacentdigits(number);
-
-            //    if (IsLessThenNext(number) && ContainsAdjacentdigits(number))
-            //    {
-            //        results.Add(number);
-            //    }
-            //}
 
             for (int number = 134792; number < 675810; number++)
             {

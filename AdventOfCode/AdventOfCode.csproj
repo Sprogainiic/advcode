@@ -45,10 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Day_1\Day_1_1.cs" />
+    <Compile Include="Day_1\Day_1_2.cs" />
+    <Compile Include="Day_2\Day_2_1.cs" />
+    <Compile Include="Day_2\Day_2_2.cs" />
     <Compile Include="Day_3\Day_3_1.cs" />
     <Compile Include="Day_3\Day_3_2.cs" />
     <Compile Include="Day_4\Day_4_1.cs" />
     <Compile Include="Day_4\Day_4_2.cs" />
+    <Compile Include="Day_5\Day_5_1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
