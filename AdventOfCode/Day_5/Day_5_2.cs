@@ -11,7 +11,7 @@ namespace AdventOfCode.Day_5
     {
         public static void ProcessingAnIntcode_5_1()
         {
-            var intCode = GetPuzzleInput(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_5\Input_5_1.txt");
+            var intCode = GetPuzzleInput(@"J:\My Documents\adventofcode\repos\advcode-master\AdventOfCode\Day_5\Input_5_1.txt");
 
             for (int i = 0; i < intCode.Count;)
             {
@@ -52,15 +52,16 @@ namespace AdventOfCode.Day_5
                 }
                 else if (firstOpcode == 5)
                 {
-
+                    i = ProcessJumpIfTrueInstructions(intCode, firstOpcode, i, modeForFirstParameter, modeForSecondParameter);
                 }
                 else if (firstOpcode == 6)
                 {
-
+                    i = ProcessJumpIfFalseInstructions(intCode, firstOpcode, i, modeForFirstParameter, modeForSecondParameter);
                 }
                 else if (firstOpcode == 7)
                 {
-
+                    ProcessLessThanInstructions(intCode, firstOpcode, i, modeForFirstParameter, modeForSecondParameter);
+                    i = i + 4;
                 }
                 else if (firstOpcode == 8)
                 {
@@ -68,18 +69,75 @@ namespace AdventOfCode.Day_5
                     i = i + 4;
                 }
             }
-            Console.ReadLine();
         }
 
-        private static void ProcessEqualsInstructions(List<string> intCode, int opcode, int i, int modeForFirstParameter, int modeForSecondParameter)
+        private static int ProcessJumpIfFalseInstructions(List<string> intCode, int firstOpcode, int i, int modeForFirstParameter, int modeForSecondParameter)
         {
-            //if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter.Otherwise, it stores 0.
+            // Opcode 6 is jump-if-false: if the first parameter is zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
+            var firstParam = Int32.Parse(intCode[i + 1]);
+            var secondParam = Int32.Parse(intCode[i + 2]);
+            var outputPosition = i;
+
+            var firstParameterForCalculation = modeForFirstParameter == 0 ? Int32.Parse(intCode[firstParam]) : firstParam;
+            var secondParameterForCalculation = modeForSecondParameter == 0 ? Int32.Parse(intCode[secondParam]) : secondParam;
+
+            if (firstParameterForCalculation == 0)
+            {
+                return secondParameterForCalculation;
+            }
+            return i + 3;
+        }
+
+        private static int ProcessJumpIfTrueInstructions(List<string> intCode, int opcode, int i, int modeForFirstParameter, int modeForSecondParameter)
+        {
+            // Opcode 5 is jump-if-true: if the first parameter is non-zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
+            var firstParam = Int32.Parse(intCode[i + 1]);
+            var secondParam = Int32.Parse(intCode[i + 2]);
+            var outputPosition = i;
+
+            var firstParameterForCalculation = modeForFirstParameter == 0 ? Int32.Parse(intCode[firstParam]) : firstParam;
+            var secondParameterForCalculation = modeForSecondParameter == 0 ? Int32.Parse(intCode[secondParam]) : secondParam;
+
+            if (firstParameterForCalculation != 0)
+            {
+                return secondParameterForCalculation;
+            }
+            return i + 3;
+        }
+
+        private static void ProcessLessThanInstructions(List<string> intCode, int opcode, int i, int modeForFirstParameter, int modeForSecondParameter)
+        {
+            // Opcode 7 is less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
             int firstOpcode = Int32.Parse(opcode.ToString());
             var firstParam = Int32.Parse(intCode[i + 1]);
             var secondParam = Int32.Parse(intCode[i + 2]);
             var outputPosition = Int32.Parse(intCode[i + 3]);
 
-            if (firstParam == secondParam)
+            var firstParameterForCalculation = modeForFirstParameter == 0 ? Int32.Parse(intCode[firstParam]) : firstParam;
+            var secondParameterForCalculation = modeForSecondParameter == 0 ? Int32.Parse(intCode[secondParam]) : secondParam;
+
+            if (firstParameterForCalculation < secondParameterForCalculation)
+            {
+                intCode[outputPosition] = 1.ToString();
+            }
+            else
+            {
+                intCode[outputPosition] = 0.ToString();
+            }
+        }
+
+        private static void ProcessEqualsInstructions(List<string> intCode, int opcode, int i, int modeForFirstParameter, int modeForSecondParameter)
+        {
+            // Opcode 8 is equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
+            int firstOpcode = Int32.Parse(opcode.ToString());
+            var firstParam = Int32.Parse(intCode[i + 1]);
+            var secondParam = Int32.Parse(intCode[i + 2]);
+            var outputPosition = Int32.Parse(intCode[i + 3]);
+
+            var firstParameterForCalculation = modeForFirstParameter == 0 ? Int32.Parse(intCode[firstParam]) : firstParam;
+            var secondParameterForCalculation = modeForSecondParameter == 0 ? Int32.Parse(intCode[secondParam]) : secondParam;
+
+            if (firstParameterForCalculation == secondParameterForCalculation)
             {
                 intCode[outputPosition] = 1.ToString();
             }
@@ -135,8 +193,8 @@ namespace AdventOfCode.Day_5
 
         public static List<string> GetPuzzleInput(string path)
         {
-            //var inputFile = File.ReadAllText(path).Split(',');
-            var inputFile = "3,9,8,9,10,9,4,9,99,-1,8".Split(',');
+            var inputFile = File.ReadAllText(path).Split(',');
+            //var inputFile = "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99".Split(',');
 
             var result = new List<string>(inputFile);
 
