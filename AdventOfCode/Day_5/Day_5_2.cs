@@ -9,9 +9,9 @@ namespace AdventOfCode.Day_5
 {
     public class Day_5_2
     {
-        public static void ProcessingAnIntcode_5_1()
+        public static void ProcessingAnIntcode_5_2()
         {
-            var intCode = GetPuzzleInput(@"J:\My Documents\adventofcode\repos\advcode-master\AdventOfCode\Day_5\Input_5_1.txt");
+            var intCode = GetPuzzleInput(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_5\Input_5_1.txt");
 
             for (int i = 0; i < intCode.Count;)
             {

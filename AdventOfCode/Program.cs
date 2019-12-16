@@ -18,7 +18,7 @@ namespace AdventOfCode
             //Day_3_2.GetDistanceToClosestIntersection();
             //Day_4.Day_4_2.GetPossiblePasswordCount();
 
-            Day_5.Day_5_2.ProcessingAnIntcode_5_1();
+            Day_5.Day_5_2.ProcessingAnIntcode_5_2();
         }
 
         private static void Run_Day_3_1()
