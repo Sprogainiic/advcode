@@ -9,10 +9,10 @@ namespace AdventOfCode.Day_6
 {
     public class Day_6_1
     {
-        public static void Ipid()
+        public static void CountOfDirectAndIndirectOrbits()
         {
-            //var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_1_TEST.txt");
-            var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_1.txt");
+            var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_2_TEST.txt");
+            //var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_1.txt");
 
             SortedList<string, int> keyValuePairs = new SortedList<string, int>();
             List<string> innerPlanets = new List<string>();

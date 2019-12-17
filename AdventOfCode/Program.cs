@@ -20,7 +20,9 @@ namespace AdventOfCode
 
             //Day_5.Day_5_2.ProcessingAnIntcode_5_2();
 
-            Day_6.Day_6_1.Ipid();
+            //Day_6.Day_6_1.CountOfDirectAndIndirectOrbits();
+
+            Day_6.Day_6_2.DistanceBetweenMeAndSanta();
         }
 
         private static void Run_Day_3_1()
