@@ -27,36 +27,29 @@ namespace AdventOfCode.Day_6
 
             var counter = 0;
             var innerPlanetIndex = innerPlanets.FindIndex(e => e == "COM");
-            var outerPlanet = GetOuterPlanet(innerPlanetIndex, outerPlanets);
+            var outerPlanet = outerPlanets[innerPlanetIndex];
             var innerPlanetsIndexes = GetInnerPlanetsIndex(outerPlanet, innerPlanets);
 
             counter++;
             keyValuePairs.Add(outerPlanet, counter);
 
-            var result = GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter,  outerPlanet,  innerPlanetsIndexes);
+            var result = GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter, innerPlanetsIndexes);
         }
 
-        private static int GetCountOfDirectAndIndirectOrbits(SortedList<string, int> keyValuePairs, List<string> innerPlanets, List<string> outerPlanets,  int counter,  string outerPlanet,  List<int> innerPlanetsIndexes)
+        private static int GetCountOfDirectAndIndirectOrbits(SortedList<string, int> keyValuePairs, List<string> innerPlanets, List<string> outerPlanets,  int counter,  List<int> innerPlanetsIndexes)
         {
             counter++;
             foreach (var index in innerPlanetsIndexes)
             {
-                outerPlanet = GetOuterPlanet(index, outerPlanets);
+                var outerPlanet = outerPlanets[index];
                 innerPlanetsIndexes = GetInnerPlanetsIndex(outerPlanet, innerPlanets);
                 keyValuePairs.Add(outerPlanet, counter);
                 if (innerPlanetsIndexes.Count > 0)
                 {
-                    GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter,  outerPlanet,  innerPlanetsIndexes);
+                    GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter, innerPlanetsIndexes);
                 }
             }
             return keyValuePairs.Values.Sum();
-        }
-
-        private static string GetOuterPlanet(int innerPlanetIndex, List<string> outerPlanets)
-        {
-            string result = string.Empty;
-            result = outerPlanets[innerPlanetIndex];
-            return result;
         }
 
         private static List<int> GetInnerPlanetsIndex(string outerPlanet, List<string> innerPlanets)
