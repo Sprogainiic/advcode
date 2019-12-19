@@ -9,133 +9,49 @@ namespace AdventOfCode.Day_6
 {
     public class Day_6_2
     {
+        /// <summary>
+        /// This was har, solved thanks to hint from https://github.com/tstavropoulos/AdventOfCode2019/tree/master/Day06
+        /// </summary>
         public static void DistanceBetweenMeAndSanta()
         {
-            var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_2_TEST.txt");
-            //var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_1.txt");
+            var inputList = GetInputData(@"C:\Users\mblin\source\repos\AdventOfCode\AdventOfCode\Day_6\Input_6_2.txt");
+            SortedList<string, string> keyValuePairs = new SortedList<string, string>();
+            List<string> checkedPlanets = new List<string>();
 
-            SortedList<string, int> keyValuePairs = new SortedList<string, int>();
-            List<string> innerPlanets = new List<string>();
-            List<string> outerPlanets = new List<string>();
-
+            // KEY = planets[1] (----- CHILDREN -----) | VALUE = planets[0] (----- PARENT -----)
             foreach (var item in inputList)
             {
                 var planets = item.Split(')');
-                innerPlanets.Add(planets[0]);
-                outerPlanets.Add(planets[1]);
+                keyValuePairs.Add(planets[1], planets[0]);
             }
 
-            var myOrbitIndex = outerPlanets.FindIndex(e => e == "YOU");
-            var myorbit = innerPlanets[myOrbitIndex]; // I'm orbition around myorbit
+            List<KeyValuePair<string, string>> pathFromMe = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>> pathFromSanta = new List<KeyValuePair<string, string>>();
 
-            var santasOrbitIndex = outerPlanets.FindIndex(e => e == "SAN");
-            var santasOrbit = innerPlanets[santasOrbitIndex]; // I'm orbition around myorbit
+            var santasPlantet = keyValuePairs.Where(x => x.Key == "SAN").FirstOrDefault();
+            var parentPlanet = keyValuePairs.Where(x => x.Key == "YOU").FirstOrDefault();
 
-            var nextOrbitIndex = outerPlanets.FindIndex(e => e == "YOU");
-            var nextOrbit = innerPlanets[nextOrbitIndex];
-
-
-            FindNextOrbits(myorbit, outerPlanets, innerPlanets);
-
-            while (nextOrbit != santasOrbit)
+            while (parentPlanet.Value != "COM" )
             {
-                var temp = nextOrbit;
-                nextOrbitIndex = outerPlanets.IndexOf(nextOrbit);
-                nextOrbit = innerPlanets[nextOrbitIndex];
-
-                if (innerPlanets.Where(p => p == nextOrbit).ToList().Count() > 1)
-                {
-                    List<int> nextInnerPlanetIndexes = new List<int>();
-                    nextInnerPlanetIndexes = Enumerable.Range(0, innerPlanets.Count)
-                                            .Where(j => innerPlanets[j] == nextOrbit)
-                                            .ToList();
-                    foreach (var item in nextInnerPlanetIndexes)
-                    {
-                        //nextOrbitIndex = outerPlanets.IndexOf(item);
-                        if (temp != outerPlanets[item])
-                        {
-                            nextOrbit = outerPlanets[item];
-                        }
-                        if (nextOrbit == santasOrbit)
-                        {
-                            break;
-                        }
-                    }
-                }
+                parentPlanet = keyValuePairs.Where(x => x.Key == parentPlanet.Value).FirstOrDefault();
+                pathFromMe.Add(parentPlanet);
             }
 
-
-
-
-
-
-
-            var counter = 0;
-            var outerPlanetIndex = outerPlanets.FindIndex(e => e == "YOU");
-            var innerPlanet = innerPlanets[outerPlanetIndex];
-            var innerPlanetsIndexes = GetInnerPlanetsIndex(innerPlanet, outerPlanets);
-
-            counter++;
-            keyValuePairs.Add(innerPlanet, counter);
-
-            var result = GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets, counter, innerPlanetsIndexes);
-        }
-
-
-
-
-
-
-
-        private static void FindNextOrbits(string nextOrbit, List<string> outerPlanets, List<string> innerPlanets)
-        {
-            var currentOrbit = nextOrbit;
-            var nextInnerPlanetIndexes = Enumerable.Range(0, innerPlanets.Count)
-                        .Where(j => innerPlanets[j] == nextOrbit)
-                        .ToList();
-
-            foreach (var index in nextInnerPlanetIndexes)
+            parentPlanet = keyValuePairs.Where(x => x.Key == "SAN").FirstOrDefault();
+            while (parentPlanet.Value != "COM")
             {
-                if (outerPlanets[index] == "I")
-                {
-                    break;
-                }
-                FindNextOrbits(outerPlanets[index], outerPlanets, innerPlanets);
+                parentPlanet = keyValuePairs.Where(x => x.Key == parentPlanet.Value).FirstOrDefault();
+                pathFromSanta.Add(parentPlanet);
             }
+
+            var samePlanetInLists = pathFromSanta.FindAll(x => pathFromMe.Contains(x)).FirstOrDefault();
+
+            var myDistance = pathFromMe.IndexOf(samePlanetInLists);
+            var santasDistance = pathFromSanta.IndexOf(samePlanetInLists);
+
+            var t = myDistance + santasDistance;
         }
 
-
-
-
-
-
-
-
-
-        private static int GetCountOfDirectAndIndirectOrbits(SortedList<string, int> keyValuePairs, List<string> innerPlanets, List<string> outerPlanets, int counter, List<int> innerPlanetsIndexes)
-        {
-            counter++;
-            foreach (var index in innerPlanetsIndexes)
-            {
-                var outerPlanet = outerPlanets[index];
-                innerPlanetsIndexes = GetInnerPlanetsIndex(outerPlanet, innerPlanets);
-                keyValuePairs.Add(outerPlanet, counter);
-                if (innerPlanetsIndexes.Count > 0)
-                {
-                    GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets, counter, innerPlanetsIndexes);
-                }
-            }
-            return keyValuePairs.Values.Sum();
-        }
-
-        private static List<int> GetInnerPlanetsIndex(string outerPlanet, List<string> innerPlanets)
-        {
-            List<int> nextInnerPlanetIndexes = new List<int>();
-            nextInnerPlanetIndexes = Enumerable.Range(0, innerPlanets.Count)
-                                    .Where(j => innerPlanets[j] == outerPlanet)
-                                    .ToList();
-            return nextInnerPlanetIndexes;
-        }
 
         public static List<string> GetInputData(string path)
         {

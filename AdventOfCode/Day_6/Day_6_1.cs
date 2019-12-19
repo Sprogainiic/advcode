@@ -26,14 +26,18 @@ namespace AdventOfCode.Day_6
             }
 
             var counter = 0;
-            var innerPlanetIndex = innerPlanets.FindIndex(e => e == "COM");
-            var outerPlanet = outerPlanets[innerPlanetIndex];
-            var innerPlanetsIndexes = GetInnerPlanetsIndex(outerPlanet, innerPlanets);
+            //var innerPlanetIndex = innerPlanets.FindIndex(e => e == "COM");
+            //var outerPlanet = outerPlanets[innerPlanetIndex];
+            //var innerPlanetsIndexes = GetInnerPlanetsIndex(outerPlanet, innerPlanets);
+
+            var outerPlanetIndex = innerPlanets.FindIndex(e => e == "COM");
+            var innerPlanet = outerPlanets[outerPlanetIndex];
+            var outerPlanetsIndexes = GetInnerPlanetsIndex(innerPlanet, innerPlanets);
 
             counter++;
-            keyValuePairs.Add(outerPlanet, counter);
+            keyValuePairs.Add(innerPlanet, counter);
 
-            var result = GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter, innerPlanetsIndexes);
+            var result = GetCountOfDirectAndIndirectOrbits(keyValuePairs, innerPlanets, outerPlanets,  counter, outerPlanetsIndexes);
         }
 
         private static int GetCountOfDirectAndIndirectOrbits(SortedList<string, int> keyValuePairs, List<string> innerPlanets, List<string> outerPlanets,  int counter,  List<int> innerPlanetsIndexes)
